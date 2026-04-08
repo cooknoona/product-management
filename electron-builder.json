@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "com.productmanagement.stocktake",
+  "productName": "재고조사",
+  "asar": true,
+  "asarUnpack": ["**/node_modules/better-sqlite3/**"],
+  "directories": {
+    "output": "release/${version}"
+  },
+  "files": [
+    "dist-electron",
+    "dist",
+    "package.json",
+    "node_modules/better-sqlite3/**"
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "artifactName": "${productName}_${version}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false
+  }
+}
