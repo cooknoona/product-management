@@ -5,6 +5,7 @@ import os from 'node:os'
 import { initAppPaths } from './app/env'
 import { closeDatabase, initDatabase } from './database/connection'
 import { registerAllIpcHandlers } from './ipc/register-handlers'
+import { runAdminInitialiser } from './login/AdminInitialiser'
 import { createMainWindow } from './window/main-window'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -30,6 +31,7 @@ let win: BrowserWindow | null = null
 
 app.whenReady().then(() => {
   initDatabase()
+  runAdminInitialiser()
   registerAllIpcHandlers()
   win = createMainWindow()
 })

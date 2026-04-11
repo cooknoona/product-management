@@ -14,6 +14,7 @@ export default defineConfig(function (_a) {
         resolve: {
             alias: {
                 '@': path.join(__dirname, 'src'),
+                '@shared': path.join(__dirname, 'shared'),
             },
         },
         plugins: [

@@ -20,8 +20,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
 contextBridge.exposeInMainWorld('electronAPI', {
   auth: {
-    register: (payload: { accountId: string; password: string; name: string }) =>
-      ipcRenderer.invoke('auth:register', payload),
     login: (payload: { accountId: string; password: string }) =>
       ipcRenderer.invoke('auth:login', payload),
   },

@@ -1,14 +1,12 @@
 /// <reference types="vite/client" />
 
-export type AuthUser = { accountId: string; name: string }
+import type { AppErrorCodeValue } from '../shared/app-errors'
 
-export type AuthRegisterResult =
-  | { ok: true }
-  | { ok: false; error: string }
+export type AuthUser = { accountId: string; name: string }
 
 export type AuthLoginResult =
   | { ok: true; user: AuthUser }
-  | { ok: false; error: string }
+  | { ok: false; code: AppErrorCodeValue }
 
 export type ProductDto = {
   id: number
@@ -20,11 +18,11 @@ export type ProductDto = {
 
 export type ProductListResult =
   | { ok: true; products: ProductDto[] }
-  | { ok: false; error: string }
+  | { ok: false; code: AppErrorCodeValue }
 
 export type ProductCreateResult =
   | { ok: true; product: ProductDto }
-  | { ok: false; error: string }
+  | { ok: false; code: AppErrorCodeValue }
 
 declare global {
   interface Window {
@@ -39,11 +37,6 @@ declare global {
     }
     electronAPI: {
       auth: {
-        register: (payload: {
-          accountId: string
-          password: string
-          name: string
-        }) => Promise<AuthRegisterResult>
         login: (payload: {
           accountId: string
           password: string

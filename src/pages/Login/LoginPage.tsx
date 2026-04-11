@@ -1,129 +1,59 @@
-import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../auth/AuthContext'
-import './LoginPage.css'
-
-type Mode = 'login' | 'register'
+import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthContext";
+import { StandardButton } from "../../common/buttons";
+import { LabelField } from "../../common/fields";
+import { LoginCardForm } from "../../common/forms";
+import { TextInput } from "../../common/inputs";
+import { useAppModal } from "../../errors/AppModalContext";
+import { useGlobalLoading } from "../../loading/GlobalLoadingContext";
+import "./LoginPage.css";
 
 export function LoginPage() {
-  const navigate = useNavigate()
-  const { user, login } = useAuth()
-  const [mode, setMode] = useState<Mode>('login')
-  const [accountId, setAccountId] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [pending, setPending] = useState(false)
+  const navigate = useNavigate();
+  const { user, login } = useAuth();
+  const { showError, showValidationWarning, dismissModal } = useAppModal();
+  const { runWithLoading, isLoading } = useGlobalLoading();
+  const [accountId, setAccountId] = useState("");
+  const [password, setPassword] = useState("");
 
-  if (user) return <Navigate to="/home" replace />
+  if (user) return <Navigate to="/home" replace />;
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    setPending(true)
-    try {
-      if (mode === 'register') {
-        const res = await window.electronAPI.auth.register({
-          accountId,
-          password,
-          name,
-        })
-        if (!res.ok) {
-          if (res.error === 'duplicate_account') {
-            setError('이미 사용 중인 계정입니다.')
-          } else {
-            setError('등록에 실패했습니다.')
-          }
-          return
-        }
-        setMode('login')
-        setPassword('')
-        setName('')
-        return
-      }
+    e.preventDefault();
+    dismissModal();
 
-      const res = await window.electronAPI.auth.login({ accountId, password })
-      if (!res.ok) {
-        setError('계정 또는 비밀번호가 올바르지 않습니다.')
-        return
-      }
-      login(res.user)
-      navigate('/home')
-    } finally {
-      setPending(false)
+    if (!accountId.trim() || !password) {
+      showValidationWarning("아이디와 비밀번호를 모두 입력해 주세요."); 
+      return;
     }
+
+    await runWithLoading(async () => {
+      const res = await window.electronAPI.auth.login({ accountId, password });
+      if (!res.ok) {
+        showError(res.code);
+        return;
+      }
+      login(res.user);
+      navigate("/home");
+    });
   }
 
   return (
     <div className="login-page">
-      <div className="login-card">
-        <h1>재고조사</h1>
-        <p className="login-lead">
-          {mode === 'login' ? '로그인' : '계정 등록'}
-        </p>
-
-        <div className="login-tabs">
-          <button
-            type="button"
-            className={mode === 'login' ? 'active' : ''}
-            onClick={() => {
-              setMode('login')
-              setError(null)
-            }}
-          >
+      <LoginCardForm title="로그인">
+        <form className="login-page__form" noValidate onSubmit={handleSubmit}>
+          <LabelField labelName="아이디" required>
+            <TextInput value={accountId} onChange={(e) => setAccountId(e.target.value)} autoComplete="username" />
+          </LabelField>
+          <LabelField labelName="비밀번호" required>
+            <TextInput type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
+          </LabelField>
+          <StandardButton type="submit" disabled={isLoading}>
             로그인
-          </button>
-          <button
-            type="button"
-            className={mode === 'register' ? 'active' : ''}
-            onClick={() => {
-              setMode('register')
-              setError(null)
-            }}
-          >
-            등록
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="login-form">
-          <label>
-            <span>계정 ID</span>
-            <input
-              value={accountId}
-              onChange={(e) => setAccountId(e.target.value)}
-              autoComplete="username"
-              required
-            />
-          </label>
-          {mode === 'register' && (
-            <label>
-              <span>이름</span>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                autoComplete="name"
-                required
-              />
-            </label>
-          )}
-          <label>
-            <span>비밀번호</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete={
-                mode === 'login' ? 'current-password' : 'new-password'
-              }
-              required
-            />
-          </label>
-          {error && <p className="login-error">{error}</p>}
-          <button type="submit" disabled={pending}>
-            {pending ? '처리 중…' : mode === 'login' ? '로그인' : '등록'}
-          </button>
+          </StandardButton>
         </form>
-      </div>
+      </LoginCardForm>
     </div>
-  )
+  );
 }

@@ -1,4 +1,6 @@
 import { ipcMain } from 'electron'
+import { AppErrorCode, err } from '../../../shared/app-errors'
+import { runIpcHandler } from '../errors/handle-ipc'
 import { getDatabase } from '../database/connection'
 
 export type ProductRow = {
@@ -13,57 +15,61 @@ type CreatePayload = { name: string; price: number; quantity: number }
 
 export function registerProductHandlers(): void {
   ipcMain.handle('product:list', async () => {
-    const db = getDatabase()
-    if (!db) return { ok: false as const, error: 'db_unavailable' }
+    return runIpcHandler(async () => {
+      const db = getDatabase()
+      if (!db) return err(AppErrorCode.SERVICE_UNAVAILABLE)
 
-    const rows = db
-      .prepare(
-        `
+      const rows = db
+        .prepare(
+          `
         SELECT id, name, price, quantity, registered_at AS registeredAt
         FROM product
         ORDER BY id DESC
       `,
-      )
-      .all() as ProductRow[]
+        )
+        .all() as ProductRow[]
 
-    return { ok: true as const, products: rows }
+      return { ok: true as const, products: rows }
+    })
   })
 
   ipcMain.handle('product:create', async (_evt, payload: CreatePayload) => {
-    const db = getDatabase()
-    if (!db) return { ok: false as const, error: 'db_unavailable' }
+    return runIpcHandler(async () => {
+      const db = getDatabase()
+      if (!db) return err(AppErrorCode.SERVICE_UNAVAILABLE)
 
-    const name = payload.name?.trim()
-    if (!name) return { ok: false as const, error: 'invalid_name' }
+      const name = payload.name?.trim()
+      if (!name) return err(AppErrorCode.INVALID_PRODUCT_NAME)
 
-    const price = Number(payload.price)
-    const quantity = Math.trunc(Number(payload.quantity))
-    if (!Number.isFinite(price) || price < 0) {
-      return { ok: false as const, error: 'invalid_price' }
-    }
-    if (!Number.isFinite(quantity) || quantity < 0) {
-      return { ok: false as const, error: 'invalid_quantity' }
-    }
+      const price = Number(payload.price)
+      const quantity = Math.trunc(Number(payload.quantity))
+      if (!Number.isFinite(price) || price < 0) {
+        return err(AppErrorCode.INVALID_PRODUCT_PRICE)
+      }
+      if (!Number.isFinite(quantity) || quantity < 0) {
+        return err(AppErrorCode.INVALID_PRODUCT_QUANTITY)
+      }
 
-    const result = db
-      .prepare(
-        `
+      const result = db
+        .prepare(
+          `
         INSERT INTO product (name, price, quantity)
         VALUES (?, ?, ?)
       `,
-      )
-      .run(name, price, quantity)
+        )
+        .run(name, price, quantity)
 
-    const id = Number(result.lastInsertRowid)
-    const row = db
-      .prepare(
-        `
+      const id = Number(result.lastInsertRowid)
+      const row = db
+        .prepare(
+          `
         SELECT id, name, price, quantity, registered_at AS registeredAt
         FROM product WHERE id = ?
       `,
-      )
-      .get(id) as ProductRow
+        )
+        .get(id) as ProductRow
 
-    return { ok: true as const, product: row }
+      return { ok: true as const, product: row }
+    })
   })
 }

@@ -1,5 +1,8 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider, useAuth } from './auth/AuthContext'
+import { MainLayout } from './common/layouts/MainLayout'
+import { AppModalProvider } from './errors/AppModalContext'
+import { GlobalLoadingProvider } from './loading/GlobalLoadingContext'
 import { LoginPage } from './pages/Login/LoginPage'
 import { HomePage } from './pages/Home/HomePage'
 import { ProductPage } from './pages/Product/ProductPage'
@@ -16,21 +19,15 @@ function AppRoutes() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route
-        path="/home"
         element={
           <ProtectedRoute>
-            <HomePage />
+            <MainLayout />
           </ProtectedRoute>
         }
-      />
-      <Route
-        path="/product"
-        element={
-          <ProtectedRoute>
-            <ProductPage />
-          </ProtectedRoute>
-        }
-      />
+      >
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/product" element={<ProductPage />} />
+      </Route>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
@@ -41,9 +38,13 @@ export default function App() {
   return (
     <HashRouter>
       <AuthProvider>
-        <div className="app-shell">
-          <AppRoutes />
-        </div>
+        <AppModalProvider>
+          <GlobalLoadingProvider>
+            <div className="app-shell">
+              <AppRoutes />
+            </div>
+          </GlobalLoadingProvider>
+        </AppModalProvider>
       </AuthProvider>
     </HashRouter>
   )

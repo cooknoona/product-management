@@ -12,7 +12,7 @@ export function createMainWindow(): BrowserWindow {
   const viteUrl = process.env.VITE_DEV_SERVER_URL
 
   const win = new BrowserWindow({
-    title: '재고조사',
+    title: 'Product Management',
     width: 1200,
     height: 800,
     webPreferences: {

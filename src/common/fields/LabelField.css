@@ -1,0 +1,33 @@
+.label-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.label-field__label-row {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  user-select: none;
+}
+
+.label-field__name {
+  color: var(--muted);
+}
+
+.label-field__required-mark {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 0.95em;
+  font-weight: 700;
+  color: #dc2626;
+  text-decoration: none;
+  cursor: help;
+}
+
+.label-field__control {
+  display: block;
+}

@@ -1,4 +1,6 @@
 .login-page {
+  --login-control-width: calc(100% * 2 / 3);
+
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -6,95 +8,37 @@
   padding: 1.5rem;
 }
 
-.login-card {
+/* 폼 안 필드·버튼 블록을 카드에서 가로 가운데 정렬 (LoginCardForm·공용 컴포넌트 미수정) */
+.login-page .login-page__form {
+  align-items: center;
+}
+
+/* 각 필드는 고정 너비 컬럼: 라벨·입력은 컬럼 기준 왼쪽 정렬 */
+.login-page .login-page__form .label-field {
+  width: var(--login-control-width);
+  max-width: 100%;
+  align-items: flex-start;
+}
+
+.login-page .label-field__label-row {
+  justify-content: flex-start;
   width: 100%;
-  max-width: 380px;
-  padding: 2rem;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
 }
 
-.login-card h1 {
-  margin: 0 0 0.25rem;
-  font-size: 1.5rem;
-  text-align: center;
+.login-page .label-field__control {
+  width: 100%;
+  max-width: 100%;
 }
 
-.login-lead {
-  margin: 0 0 1.25rem;
-  text-align: center;
-  color: var(--muted);
-  font-size: 0.95rem;
+.login-page .standard-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-.login-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
-}
-
-.login-tabs button {
-  padding: 0.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.login-tabs button.active {
-  background: var(--surface-hover);
-  color: var(--text);
-  border-color: var(--border);
-  font-weight: 600;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.login-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-.login-form input {
-  padding: 0.55rem 0.65rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text);
-  font-size: 1rem;
-}
-
-.login-error {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #dc2626;
-}
-
-.login-form > button[type='submit'] {
-  margin-top: 0.25rem;
-  padding: 0.65rem;
-  border-radius: 8px;
-  border: none;
-  background: var(--accent);
-  color: var(--accent-contrast);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.login-form > button[type='submit']:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
+.login-page .login-page__form .standard-button {
+  width: var(--login-control-width);
+  max-width: 100%;
+  box-sizing: border-box;
+  display: block;
 }

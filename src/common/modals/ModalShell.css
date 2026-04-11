@@ -1,0 +1,63 @@
+.modal-shell-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.modal-shell {
+  width: 100%;
+  max-width: 22rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+  padding: 1.25rem 1.35rem;
+}
+
+.modal-shell__header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.modal-shell__header svg {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.modal-shell__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+}
+
+.modal-shell__body {
+  margin: 0 0 1.15rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-align: center;
+}
+
+.modal-shell__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-shell__actions--warning {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

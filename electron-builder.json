@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "com.productmanagement.stocktake",
-  "productName": "재고조사",
+  "productName": "Product Management",
   "asar": true,
   "asarUnpack": ["**/node_modules/better-sqlite3/**"],
   "directories": {

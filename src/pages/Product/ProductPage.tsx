@@ -1,26 +1,42 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { StandardButton } from '../../common/buttons'
+import { LabelField } from '../../common/fields'
+import { StandardForm } from '../../common/forms'
+import { useLayoutTitle } from '../../common/layouts'
+import { NumberInput, TextInput } from '../../common/inputs'
+import { PageSection } from '../../common/sections'
+import { useAppModal } from '../../errors/AppModalContext'
+import { useGlobalLoading } from '../../loading/GlobalLoadingContext'
 import type { ProductDto } from '../../vite-env'
 import './ProductPage.css'
 
 export function ProductPage() {
+  const { setPageTitle } = useLayoutTitle()
+  const { showError, showValidationWarning, dismissModal } = useAppModal()
+  const { runWithLoading, isLoading } = useGlobalLoading()
   const [products, setProducts] = useState<ProductDto[]>([])
-  const [loadError, setLoadError] = useState<string | null>(null)
   const [name, setName] = useState('')
   const [price, setPrice] = useState('0')
   const [quantity, setQuantity] = useState('0')
-  const [formError, setFormError] = useState<string | null>(null)
-  const [pending, setPending] = useState(false)
 
-  const refresh = useCallback(async () => {
-    setLoadError(null)
+  useEffect(() => {
+    setPageTitle('상품')
+    return () => setPageTitle('')
+  }, [setPageTitle])
+
+  const loadProducts = useCallback(async () => {
     const res = await window.electronAPI.product.list()
     if (!res.ok) {
-      setLoadError('목록을 불러오지 못했습니다.')
+      showError(res.code)
       return
     }
     setProducts(res.products)
-  }, [])
+  }, [showError])
+
+  const refresh = useCallback(async () => {
+    dismissModal()
+    await runWithLoading(loadProducts)
+  }, [dismissModal, loadProducts, runWithLoading])
 
   useEffect(() => {
     void refresh()
@@ -28,79 +44,74 @@ export function ProductPage() {
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
-    setFormError(null)
-    setPending(true)
-    try {
+    dismissModal()
+
+    const trimmedName = name.trim()
+    if (!trimmedName) {
+      showValidationWarning('상품 이름을 입력해 주세요.')
+      return
+    }
+
+    const priceNum = Number(price)
+    if (!Number.isFinite(priceNum) || priceNum < 0) {
+      showValidationWarning('가격을 0 이상의 숫자로 입력해 주세요.')
+      return
+    }
+
+    const qtyRaw = Number(quantity)
+    if (!Number.isFinite(qtyRaw) || qtyRaw < 0 || !Number.isInteger(qtyRaw)) {
+      showValidationWarning('수량을 0 이상의 정수로 입력해 주세요.')
+      return
+    }
+
+    await runWithLoading(async () => {
       const res = await window.electronAPI.product.create({
-        name,
-        price: Number(price),
-        quantity: Number(quantity),
+        name: trimmedName,
+        price: priceNum,
+        quantity: qtyRaw,
       })
       if (!res.ok) {
-        setFormError('등록에 실패했습니다. 입력값을 확인하세요.')
+        showError(res.code)
         return
       }
       setName('')
       setPrice('0')
       setQuantity('0')
-      await refresh()
-    } finally {
-      setPending(false)
-    }
+      await loadProducts()
+    })
   }
 
   return (
     <div className="product-page">
-      <header className="product-header">
-        <Link to="/home" className="product-back">
-          ← 홈
-        </Link>
-        <h1>상품</h1>
-      </header>
       <main className="product-main">
-        <section className="product-form-section">
-          <h2>상품 등록</h2>
-          <form className="product-form" onSubmit={handleCreate}>
-            <label>
-              <span>이름</span>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </label>
-            <label>
-              <span>가격</span>
-              <input
-                type="number"
+        <PageSection title="상품 등록">
+          <StandardForm layout="grid" noValidate onSubmit={handleCreate}>
+            <LabelField labelName="이름" required>
+              <TextInput value={name} onChange={(e) => setName(e.target.value)} />
+            </LabelField>
+            <LabelField labelName="가격" required>
+              <NumberInput
                 min={0}
                 step="0.01"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                required
               />
-            </label>
-            <label>
-              <span>수량</span>
-              <input
-                type="number"
+            </LabelField>
+            <LabelField labelName="수량" required>
+              <NumberInput
                 min={0}
                 step={1}
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
-                required
               />
-            </label>
-            {formError && <p className="product-error">{formError}</p>}
-            <button type="submit" disabled={pending}>
-              {pending ? '저장 중…' : '등록'}
-            </button>
-          </form>
-        </section>
+            </LabelField>
+            <StandardButton type="submit" disabled={isLoading}>
+              등록
+            </StandardButton>
+          </StandardForm>
+        </PageSection>
 
-        <section className="product-list-section">
-          <h2>목록</h2>
-          {loadError && <p className="product-error">{loadError}</p>}
+        <PageSection title="목록">
           <div className="product-table-wrap">
             <table className="product-table">
               <thead>
@@ -131,7 +142,7 @@ export function ProductPage() {
               </tbody>
             </table>
           </div>
-        </section>
+        </PageSection>
       </main>
     </div>
   )
