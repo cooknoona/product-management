@@ -1,21 +1,25 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import { StandardButton } from "../../common/buttons";
+import { LoginButton, SettingsButton } from "../../common/buttons";
+import { SettingModal } from "../../common/modals";
 import { LabelField } from "../../common/fields";
 import { LoginCardForm } from "../../common/forms";
 import { TextInput } from "../../common/inputs";
 import { useAppModal } from "../../errors/AppModalContext";
+import { useLocalisation } from "../../localisation";
 import { useGlobalLoading } from "../../loading/GlobalLoadingContext";
 import "./LoginPage.css";
 
 export function LoginPage() {
   const navigate = useNavigate();
   const { user, login } = useAuth();
+  const { t } = useLocalisation();
   const { showError, showValidationWarning, dismissModal } = useAppModal();
   const { runWithLoading, isLoading } = useGlobalLoading();
   const [accountId, setAccountId] = useState("");
   const [password, setPassword] = useState("");
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   if (user) return <Navigate to="/home" replace />;
 
@@ -24,7 +28,7 @@ export function LoginPage() {
     dismissModal();
 
     if (!accountId.trim() || !password) {
-      showValidationWarning("아이디와 비밀번호를 모두 입력해 주세요."); 
+      showValidationWarning(t("login.validationBoth")); 
       return;
     }
 
@@ -41,17 +45,21 @@ export function LoginPage() {
 
   return (
     <div className="login-page">
-      <LoginCardForm title="로그인">
+      <div className="login-page__toolbar">
+        <SettingsButton onClick={() => setSettingsOpen(true)} />
+      </div>
+      {settingsOpen ? <SettingModal onClose={() => setSettingsOpen(false)} /> : null}
+      <LoginCardForm title={t("login.title")}>
         <form className="login-page__form" noValidate onSubmit={handleSubmit}>
-          <LabelField labelName="아이디" required>
+          <LabelField labelName={t("login.accountId")} required>
             <TextInput value={accountId} onChange={(e) => setAccountId(e.target.value)} autoComplete="username" />
           </LabelField>
-          <LabelField labelName="비밀번호" required>
+          <LabelField labelName={t("login.password")} required>
             <TextInput type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
           </LabelField>
-          <StandardButton type="submit" disabled={isLoading}>
-            로그인
-          </StandardButton>
+          <LoginButton type="submit" disabled={isLoading}>
+            {t("login.submit")}
+          </LoginButton>
         </form>
       </LoginCardForm>
     </div>

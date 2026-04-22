@@ -1,0 +1,9 @@
+---
+description: UI 문자열은 Localisation(메시지 키 + t)으로만 다루기
+globs: src/**/*.tsx,src/**/*.ts
+alwaysApply: false
+---
+
+- 사용자에게 보이는 문구(레이블, 버튼, 제목, `aria-label`, `title`, placeholder, 토스트/모달 본문 등)는 하드코딩하지 말고 `src/localisation/messages.ko.ts` / `messages.en.ts`에 키를 추가한 뒤 `useLocalisation().t(키)`로 사용한다.
+- 새 키는 두 언어 파일에 모두 반영해 `MessageKey` 타입이 어긋나지 않게 한다.
+- 예외: 로그, 개발용 주석, 타입/식별자, 서버·파일에 저장되는 데이터 원문은 앱 i18n 대상이 아닐 수 있다.

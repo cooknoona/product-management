@@ -1,0 +1,64 @@
+.modal-shell--settings {
+  max-width: 28rem;
+}
+
+.settings-modal__body {
+  min-height: 0;
+  margin: 0 0 1.15rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.settings-modal__section {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.settings-modal__section-title {
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  text-align: center;
+  background: color-mix(in oklab, var(--surface-hover) 80%, var(--text) 20%);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.settings-modal__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.7rem;
+}
+
+.settings-modal__label {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.settings-modal__row .option-dropdown {
+  width: 11rem;
+  max-width: 60%;
+}
+
+.modal-shell__actions--triple {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.settings-modal__actions-left,
+.settings-modal__actions-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settings-modal__actions-right {
+  margin-left: auto;
+}

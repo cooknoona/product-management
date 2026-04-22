@@ -1,34 +1,19 @@
-import { useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { MdOutlineWarning } from 'react-icons/md'
-import { StandardButton } from '../buttons'
-import type { WarningModalAction } from './warning-modal.types'
+import { useLocalisation } from '../../localisation'
+import { CloseButton } from '../buttons'
 import './ModalShell.css'
 
 type WarningModalProps = {
   message: string
-  actions?: WarningModalAction[]
-  onDismiss: () => void
+  onClose: () => void
 }
 
-const DEFAULT_ACTIONS: WarningModalAction[] = [
-  {
-    label: '확인',
-    variant: 'primary',
-    onClick: () => {},
-  },
-]
-
-export function WarningModal({ message, actions, onDismiss }: WarningModalProps) {
-  const resolvedActions = useMemo(() => actions ?? DEFAULT_ACTIONS, [actions])
-
-  async function handleAction(action: WarningModalAction) {
-    await Promise.resolve(action.onClick())
-    onDismiss()
-  }
+export function WarningModal({ message, onClose }: WarningModalProps) {
+  const { t } = useLocalisation()
 
   const node = (
-    <div className="modal-shell-backdrop" role="presentation" onClick={onDismiss}>
+    <div className="modal-shell-backdrop" role="presentation" onClick={onClose}>
       <div
         className="modal-shell"
         role="alertdialog"
@@ -37,23 +22,16 @@ export function WarningModal({ message, actions, onDismiss }: WarningModalProps)
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-shell__header">
-          <MdOutlineWarning aria-hidden color="#ca8a04" />
+          <MdOutlineWarning aria-hidden className="modal-shell__icon modal-shell__icon--warning" />
           <h2 id="warning-modal-title" className="modal-shell__title">
-            WARNING
+            {t('modal.warningTitle')}
           </h2>
         </div>
         <p className="modal-shell__body">{message}</p>
-        <div className="modal-shell__actions modal-shell__actions--warning">
-          {resolvedActions.map((action, index) => (
-            <StandardButton
-              key={`${action.label}-${index}`}
-              type="button"
-              variant={action.variant ?? 'primary'}
-              onClick={() => void handleAction(action)}
-            >
-              {action.label}
-            </StandardButton>
-          ))}
+        <div className="modal-shell__actions">
+          <CloseButton type="button" onClick={onClose}>
+            {t('common.close')}
+          </CloseButton>
         </div>
       </div>
     </div>

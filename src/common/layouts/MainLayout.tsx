@@ -1,5 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthContext'
+import { useLocalisation } from '../../localisation'
 import { LayoutTitleProvider, useLayoutTitle } from './LayoutTitleContext'
 import { PageSection } from '../sections'
 import './MainLayout.css'
@@ -8,6 +9,7 @@ function MainLayoutShell() {
   const location = useLocation()
   const navigate = useNavigate()
   const { user, logout } = useAuth()
+  const { t } = useLocalisation()
   const { pageTitle } = useLayoutTitle()
 
   function handleLogout() {
@@ -18,7 +20,7 @@ function MainLayoutShell() {
   return (
     <div className="main-layout">
       <header className="main-layout-header">
-        <div className="main-layout-brand">Product Management</div>
+        <div className="main-layout-brand">{t('app.brandName')}</div>
         <div className="main-layout-page-title" title={pageTitle || undefined}>
           {pageTitle}
         </div>
@@ -27,13 +29,13 @@ function MainLayoutShell() {
             to="/home"
             className={`main-layout-link ${location.pathname === '/home' ? 'is-active' : ''}`}
           >
-            홈
+            {t('layout.navHome')}
           </Link>
           <Link
             to="/product"
             className={`main-layout-link ${location.pathname === '/product' ? 'is-active' : ''}`}
           >
-            상품
+            {t('layout.navProduct')}
           </Link>
         </nav>
         <div className="main-layout-user">
@@ -41,7 +43,7 @@ function MainLayoutShell() {
             {user?.name} ({user?.accountId})
           </span>
           <button type="button" onClick={handleLogout}>
-            로그아웃
+            {t('layout.logout')}
           </button>
         </div>
       </header>

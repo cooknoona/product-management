@@ -1,23 +1,25 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useLayoutTitle } from '../../common/layouts'
+import { useLocalisation } from '../../localisation'
 import './HomePage.css'
 
 export function HomePage() {
   const { setPageTitle } = useLayoutTitle()
+  const { t } = useLocalisation()
 
   useEffect(() => {
-    setPageTitle('홈')
+    setPageTitle(t('home.title'))
     return () => setPageTitle('')
-  }, [setPageTitle])
+  }, [setPageTitle, t])
 
   return (
     <div className="home-page">
       <main className="home-main">
-        <p className="home-welcome">재고조사 앱에 오신 것을 환영합니다.</p>
+        <p className="home-welcome">{t('app.welcome')}</p>
         <nav className="home-nav">
           <Link className="home-link" to="/product">
-            상품 관리
+            {t('home.navProduct')}
           </Link>
         </nav>
       </main>

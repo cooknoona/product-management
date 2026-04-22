@@ -36,6 +36,22 @@
   height: 1.75rem;
 }
 
+.modal-shell__icon--error {
+  color: var(--semantic-error);
+}
+
+.modal-shell__icon--warning {
+  color: var(--semantic-warning);
+}
+
+.modal-shell__icon--success {
+  color: var(--semantic-success);
+}
+
+.modal-shell__icon--confirm {
+  color: var(--semantic-confirm);
+}
+
 .modal-shell__title {
   margin: 0;
   font-size: 1.05rem;
@@ -59,5 +75,9 @@
 
 .modal-shell__actions--warning {
   flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.modal-shell__actions--dual {
   gap: 0.5rem;
 }

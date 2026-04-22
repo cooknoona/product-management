@@ -1,1 +1,6 @@
-export { StandardButton } from './StandardButton'
+export { SettingsButton } from './SettingsButton'
+export { LoginButton } from './LoginButton'
+export { ApplyButton } from './ApplyButton'
+export { ConfirmButton } from './ConfirmButton'
+export { CancelButton } from './CancelButton'
+export { CloseButton } from './CloseButton'

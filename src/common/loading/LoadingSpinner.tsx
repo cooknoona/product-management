@@ -1,13 +1,15 @@
 import { createPortal } from 'react-dom'
+import { useLocalisation } from '../../localisation'
 import './LoadingSpinner.css'
 
 export function LoadingSpinner() {
+  const { t } = useLocalisation()
   const node = (
     <div
       className="loading-spinner-root"
       role="status"
       aria-busy="true"
-      aria-label="로딩 중"
+      aria-label={t('common.loading')}
     >
       <div className="loading-spinner-backdrop" />
       <div className="loading-spinner-panel">

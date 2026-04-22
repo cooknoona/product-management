@@ -1,0 +1,38 @@
+.action-button {
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.action-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.action-button--confirm {
+  border: none;
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.action-button--apply {
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+}
+
+.action-button--apply:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+}
+
+.action-button--cancel {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.action-button--cancel:hover:not(:disabled) {
+  background: var(--surface-hover);
+}

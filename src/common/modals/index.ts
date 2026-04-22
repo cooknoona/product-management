@@ -1,3 +1,5 @@
 export { ErrorModal } from './ErrorModal'
+export { ConfirmModal } from './ConfirmModal'
+export { SettingModal } from './SettingModal'
+export { SuccessModal } from './SuccessModal'
 export { WarningModal } from './WarningModal'
-export type { WarningModalAction, WarningModalActionVariant, WarningModalContentProps } from './warning-modal.types'

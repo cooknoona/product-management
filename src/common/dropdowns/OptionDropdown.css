@@ -1,0 +1,15 @@
+.option-dropdown {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.option-dropdown:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}

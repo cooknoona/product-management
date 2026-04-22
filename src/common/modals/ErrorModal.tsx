@@ -1,6 +1,7 @@
 import { createPortal } from 'react-dom'
 import { MdErrorOutline } from 'react-icons/md'
-import { StandardButton } from '../buttons'
+import { useLocalisation } from '../../localisation'
+import { CloseButton } from '../buttons'
 import './ModalShell.css'
 
 type ErrorModalProps = {
@@ -9,6 +10,7 @@ type ErrorModalProps = {
 }
 
 export function ErrorModal({ message, onClose }: ErrorModalProps) {
+  const { t } = useLocalisation()
   const node = (
     <div className="modal-shell-backdrop" role="presentation" onClick={onClose}>
       <div
@@ -19,16 +21,16 @@ export function ErrorModal({ message, onClose }: ErrorModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-shell__header">
-          <MdErrorOutline aria-hidden color="#dc2626" />
+          <MdErrorOutline aria-hidden className="modal-shell__icon modal-shell__icon--error" />
           <h2 id="error-modal-title" className="modal-shell__title">
-            ERROR
+            {t('modal.errorTitle')}
           </h2>
         </div>
         <p className="modal-shell__body">{message}</p>
         <div className="modal-shell__actions">
-          <StandardButton type="button" onClick={onClose}>
-            확인
-          </StandardButton>
+          <CloseButton type="button" onClick={onClose}>
+            {t('common.close')}
+          </CloseButton>
         </div>
       </div>
     </div>

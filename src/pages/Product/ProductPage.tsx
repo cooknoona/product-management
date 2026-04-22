@@ -1,17 +1,19 @@
 import { useCallback, useEffect, useState } from 'react'
-import { StandardButton } from '../../common/buttons'
+import { ConfirmButton } from '../../common/buttons'
 import { LabelField } from '../../common/fields'
 import { StandardForm } from '../../common/forms'
 import { useLayoutTitle } from '../../common/layouts'
 import { NumberInput, TextInput } from '../../common/inputs'
 import { PageSection } from '../../common/sections'
 import { useAppModal } from '../../errors/AppModalContext'
+import { useLocalisation } from '../../localisation'
 import { useGlobalLoading } from '../../loading/GlobalLoadingContext'
 import type { ProductDto } from '../../vite-env'
 import './ProductPage.css'
 
 export function ProductPage() {
   const { setPageTitle } = useLayoutTitle()
+  const { t, numberLocale } = useLocalisation()
   const { showError, showValidationWarning, dismissModal } = useAppModal()
   const { runWithLoading, isLoading } = useGlobalLoading()
   const [products, setProducts] = useState<ProductDto[]>([])
@@ -20,9 +22,9 @@ export function ProductPage() {
   const [quantity, setQuantity] = useState('0')
 
   useEffect(() => {
-    setPageTitle('상품')
+    setPageTitle(t('product.title'))
     return () => setPageTitle('')
-  }, [setPageTitle])
+  }, [setPageTitle, t])
 
   const loadProducts = useCallback(async () => {
     const res = await window.electronAPI.product.list()
@@ -48,19 +50,19 @@ export function ProductPage() {
 
     const trimmedName = name.trim()
     if (!trimmedName) {
-      showValidationWarning('상품 이름을 입력해 주세요.')
+      showValidationWarning(t('product.validationName'))
       return
     }
 
     const priceNum = Number(price)
     if (!Number.isFinite(priceNum) || priceNum < 0) {
-      showValidationWarning('가격을 0 이상의 숫자로 입력해 주세요.')
+      showValidationWarning(t('product.validationPrice'))
       return
     }
 
     const qtyRaw = Number(quantity)
     if (!Number.isFinite(qtyRaw) || qtyRaw < 0 || !Number.isInteger(qtyRaw)) {
-      showValidationWarning('수량을 0 이상의 정수로 입력해 주세요.')
+      showValidationWarning(t('product.validationQuantity'))
       return
     }
 
@@ -84,12 +86,12 @@ export function ProductPage() {
   return (
     <div className="product-page">
       <main className="product-main">
-        <PageSection title="상품 등록">
+        <PageSection title={t('product.sectionCreate')}>
           <StandardForm layout="grid" noValidate onSubmit={handleCreate}>
-            <LabelField labelName="이름" required>
+            <LabelField labelName={t('product.name')} required>
               <TextInput value={name} onChange={(e) => setName(e.target.value)} />
             </LabelField>
-            <LabelField labelName="가격" required>
+            <LabelField labelName={t('product.price')} required>
               <NumberInput
                 min={0}
                 step="0.01"
@@ -97,7 +99,7 @@ export function ProductPage() {
                 onChange={(e) => setPrice(e.target.value)}
               />
             </LabelField>
-            <LabelField labelName="수량" required>
+            <LabelField labelName={t('product.quantity')} required>
               <NumberInput
                 min={0}
                 step={1}
@@ -105,35 +107,35 @@ export function ProductPage() {
                 onChange={(e) => setQuantity(e.target.value)}
               />
             </LabelField>
-            <StandardButton type="submit" disabled={isLoading}>
-              등록
-            </StandardButton>
+            <ConfirmButton type="submit" disabled={isLoading}>
+              {t('product.submit')}
+            </ConfirmButton>
           </StandardForm>
         </PageSection>
 
-        <PageSection title="목록">
+        <PageSection title={t('product.sectionList')}>
           <div className="product-table-wrap">
             <table className="product-table">
               <thead>
                 <tr>
-                  <th>이름</th>
-                  <th>가격</th>
-                  <th>수량</th>
-                  <th>등록일시</th>
+                  <th>{t('product.tableName')}</th>
+                  <th>{t('product.tablePrice')}</th>
+                  <th>{t('product.tableQuantity')}</th>
+                  <th>{t('product.tableRegisteredAt')}</th>
                 </tr>
               </thead>
               <tbody>
                 {products.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="product-empty">
-                      등록된 상품이 없습니다.
+                      {t('product.empty')}
                     </td>
                   </tr>
                 ) : (
                   products.map((p) => (
                     <tr key={p.id}>
                       <td>{p.name}</td>
-                      <td>{p.price.toLocaleString()}</td>
+                      <td>{p.price.toLocaleString(numberLocale)}</td>
                       <td>{p.quantity}</td>
                       <td>{p.registeredAt}</td>
                     </tr>

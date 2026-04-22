@@ -1,4 +1,5 @@
 import { cloneElement, isValidElement, type PropsWithChildren, type ReactElement } from 'react'
+import { useLocalisation } from '../../localisation'
 import './LabelField.css'
 
 type LabelFieldProps = PropsWithChildren<{
@@ -7,6 +8,7 @@ type LabelFieldProps = PropsWithChildren<{
 }>
 
 export function LabelField({ labelName, required = false, children }: LabelFieldProps) {
+  const { t } = useLocalisation()
   const control =
     required && isValidElement(children)
       ? cloneElement(children as ReactElement<{ required?: boolean }>, { required: true })
@@ -17,7 +19,7 @@ export function LabelField({ labelName, required = false, children }: LabelField
       <span className="label-field__label-row">
         <span className="label-field__name">{labelName}</span>
         {required ? (
-          <abbr className="label-field__required-mark" title="필수">
+          <abbr className="label-field__required-mark" title={t('common.required')}>
             *
           </abbr>
         ) : null}

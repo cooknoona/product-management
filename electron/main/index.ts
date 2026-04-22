@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import os from 'node:os'
@@ -30,6 +30,7 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null = null
 
 app.whenReady().then(() => {
+  Menu.setApplicationMenu(null)
   initDatabase()
   runAdminInitialiser()
   registerAllIpcHandlers()

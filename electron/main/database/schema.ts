@@ -21,6 +21,13 @@ export function applySchema(db: Database.Database): void {
       registered_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
 
+    CREATE TABLE IF NOT EXISTS product_image (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      product_id INTEGER NOT NULL,
+      image_path TEXT NOT NULL,
+      registered_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
     CREATE INDEX IF NOT EXISTS idx_product_name ON product (name);
 
     INSERT OR IGNORE INTO schema_meta (key, value) VALUES ('version', '2');

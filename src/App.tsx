@@ -2,10 +2,12 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import { MainLayout } from './common/layouts/MainLayout'
 import { AppModalProvider } from './errors/AppModalContext'
+import { LocalisationProvider } from './localisation'
 import { GlobalLoadingProvider } from './loading/GlobalLoadingContext'
-import { LoginPage } from './pages/Login/LoginPage'
 import { HomePage } from './pages/Home/HomePage'
+import { LoginPage } from './pages/Login/LoginPage'
 import { ProductPage } from './pages/Product/ProductPage'
+import { ThemeProvider } from './theme'
 import './App.css'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -36,16 +38,20 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <HashRouter>
-      <AuthProvider>
-        <AppModalProvider>
-          <GlobalLoadingProvider>
-            <div className="app-shell">
-              <AppRoutes />
-            </div>
-          </GlobalLoadingProvider>
-        </AppModalProvider>
-      </AuthProvider>
-    </HashRouter>
+    <ThemeProvider>
+      <LocalisationProvider>
+        <HashRouter>
+          <AuthProvider>
+            <AppModalProvider>
+              <GlobalLoadingProvider>
+                <div className="app-shell">
+                  <AppRoutes />
+                </div>
+              </GlobalLoadingProvider>
+            </AppModalProvider>
+          </AuthProvider>
+        </HashRouter>
+      </LocalisationProvider>
+    </ThemeProvider>
   )
 }

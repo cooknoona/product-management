@@ -15,7 +15,8 @@
   background: var(--surface);
 }
 
-.standard-form--grid .standard-button {
+.standard-form--grid .login-button,
+.standard-form--grid .action-button {
   height: fit-content;
 }
 
