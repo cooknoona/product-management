@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom'
 import { MdOutlineWarning } from 'react-icons/md'
 import { useLocalisation } from '../../localisation'
-import { CloseButton } from '../buttons'
+import { ConfirmButton } from '../buttons'
 import './ModalShell.css'
 
 type WarningModalProps = {
@@ -15,7 +15,7 @@ export function WarningModal({ message, onClose }: WarningModalProps) {
   const node = (
     <div className="modal-shell-backdrop" role="presentation" onClick={onClose}>
       <div
-        className="modal-shell"
+        className="modal-shell modal-shell--status modal-shell--warning"
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="warning-modal-title"
@@ -28,10 +28,10 @@ export function WarningModal({ message, onClose }: WarningModalProps) {
           </h2>
         </div>
         <p className="modal-shell__body">{message}</p>
-        <div className="modal-shell__actions">
-          <CloseButton type="button" onClick={onClose}>
+        <div className="modal-shell__actions modal-shell__actions--single">
+          <ConfirmButton type="button" onClick={onClose}>
             {t('common.close')}
-          </CloseButton>
+          </ConfirmButton>
         </div>
       </div>
     </div>

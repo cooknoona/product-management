@@ -15,7 +15,7 @@ export function ConfirmModal({ message, onConfirm, onCancel }: ConfirmModalProps
   const node = (
     <div className="modal-shell-backdrop" role="presentation" onClick={onCancel}>
       <div
-        className="modal-shell"
+        className="modal-shell modal-shell--status modal-shell--confirm"
         role="dialog"
         aria-modal="true"
         aria-labelledby="confirm-modal-title"

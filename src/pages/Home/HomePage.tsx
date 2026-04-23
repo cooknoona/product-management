@@ -1,10 +1,12 @@
-import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { SettingButton } from '../../common/buttons'
 import { useLayoutTitle } from '../../common/layouts'
 import { useLocalisation } from '../../localisation'
+import { SettingModal } from '../../common/modals'
 import './HomePage.css'
 
 export function HomePage() {
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const { setPageTitle } = useLayoutTitle()
   const { t } = useLocalisation()
 
@@ -15,14 +17,10 @@ export function HomePage() {
 
   return (
     <div className="home-page">
-      <main className="home-main">
-        <p className="home-welcome">{t('app.welcome')}</p>
-        <nav className="home-nav">
-          <Link className="home-link" to="/product">
-            {t('home.navProduct')}
-          </Link>
-        </nav>
-      </main>
+      <div className="home-page__toolbar">
+        <SettingButton onClick={() => setSettingsOpen(true)} />
+      </div>
+      {settingsOpen ? <SettingModal onClose={() => setSettingsOpen(false)} /> : null}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-.settings-button {
+.setting-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -15,18 +15,16 @@
     border-color 0.15s ease;
 }
 
-.settings-button:hover:not(:disabled) {
+.setting-button:hover:not(:disabled) {
   background: var(--surface-hover);
-  border-color: var(--accent);
-  color: var(--accent);
 }
 
-.settings-button:disabled {
+.setting-button:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
-.settings-button__icon {
+.setting-button__icon {
   width: 1.35rem;
   height: 1.35rem;
 }

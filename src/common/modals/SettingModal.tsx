@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useLocalisation } from '../../localisation'
+import { useGlobalLoading } from '../../loading/GlobalLoadingContext'
 import { useTheme } from '../../theme'
 import { ApplyButton, CancelButton, ConfirmButton } from '../buttons'
 import { OptionDropdown } from '../dropdowns'
@@ -14,11 +15,13 @@ type SettingModalProps = {
 
 export function SettingModal({ onClose }: SettingModalProps) {
   const { t, locale, setLocale } = useLocalisation()
+  const { runWithLoading, isLoading } = useGlobalLoading()
   const { preference, resolved, setPreference } = useTheme()
   const currentMode = preference === 'system' ? resolved : preference
   const [draftLocale, setDraftLocale] = useState<'ko' | 'en'>(locale)
   const [draftMode, setDraftMode] = useState<'light' | 'dark'>(currentMode)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+  const [showApplyConfirm, setShowApplyConfirm] = useState(false)
   const isDirty = draftLocale !== locale || draftMode !== currentMode
 
   const languageOptions = [
@@ -30,17 +33,23 @@ export function SettingModal({ onClose }: SettingModalProps) {
     { value: 'light', label: t('settings.mode.light') },
   ]
 
-  function applyDraft() {
-    setLocale(draftLocale)
-    setPreference(draftMode)
+  async function applyDraft() {
+    await runWithLoading(async () => {
+      setLocale(draftLocale)
+      setPreference(draftMode)
+      await Promise.resolve()
+    })
   }
 
   function handleApply() {
-    applyDraft()
+    void applyDraft()
   }
 
   function handleConfirm() {
-    applyDraft()
+    if (isDirty) {
+      setShowApplyConfirm(true)
+      return
+    }
     onClose()
   }
 
@@ -53,13 +62,12 @@ export function SettingModal({ onClose }: SettingModalProps) {
   }
 
   const node = (
-    <div className="modal-shell-backdrop" role="presentation" onClick={handleCancel}>
+    <div className="modal-shell-backdrop" role="presentation">
       <div
         className="modal-shell modal-shell--settings"
         role="dialog"
         aria-modal="true"
         aria-labelledby="settings-modal-title"
-        onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-shell__header">
           <h2 id="settings-modal-title" className="modal-shell__title">
@@ -102,10 +110,10 @@ export function SettingModal({ onClose }: SettingModalProps) {
             </CancelButton>
           </div>
           <div className="settings-modal__actions-right">
-            <ApplyButton type="button" onClick={handleApply}>
+            <ApplyButton type="button" onClick={handleApply} disabled={isLoading}>
               {t('common.apply')}
             </ApplyButton>
-            <ConfirmButton type="button" onClick={handleConfirm}>
+            <ConfirmButton type="button" onClick={handleConfirm} disabled={isLoading}>
               {t('common.confirm')}
             </ConfirmButton>
           </div>
@@ -118,6 +126,19 @@ export function SettingModal({ onClose }: SettingModalProps) {
           onConfirm={() => {
             setShowCancelConfirm(false)
             onClose()
+          }}
+        />
+      ) : null}
+      {showApplyConfirm ? (
+        <ConfirmModal
+          message={t('settings.confirmApplyWarning')}
+          onCancel={() => setShowApplyConfirm(false)}
+          onConfirm={() => {
+            setShowApplyConfirm(false)
+            void (async () => {
+              await applyDraft()
+              onClose()
+            })()
           }}
         />
       ) : null}

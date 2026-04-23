@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import { LoginButton, SettingsButton } from "../../common/buttons";
+import { LoginButton, SettingButton } from "../../common/buttons";
 import { SettingModal } from "../../common/modals";
 import { LabelField } from "../../common/fields";
 import { LoginCardForm } from "../../common/forms";
@@ -46,7 +46,7 @@ export function LoginPage() {
   return (
     <div className="login-page">
       <div className="login-page__toolbar">
-        <SettingsButton onClick={() => setSettingsOpen(true)} />
+        <SettingButton onClick={() => setSettingsOpen(true)} />
       </div>
       {settingsOpen ? <SettingModal onClose={() => setSettingsOpen(false)} /> : null}
       <LoginCardForm title={t("login.title")}>

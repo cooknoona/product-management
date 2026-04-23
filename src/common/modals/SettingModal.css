@@ -62,3 +62,8 @@
 .settings-modal__actions-right {
   margin-left: auto;
 }
+
+.modal-shell--settings .modal-shell__actions--triple .action-button {
+  width: clamp(5.8rem, 22vw, 7rem);
+  padding: 0.55rem 0.75rem;
+}

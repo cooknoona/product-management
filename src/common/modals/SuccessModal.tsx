@@ -14,7 +14,7 @@ export function SuccessModal({ message, onConfirm }: SuccessModalProps) {
   const node = (
     <div className="modal-shell-backdrop" role="presentation" onClick={onConfirm}>
       <div
-        className="modal-shell"
+        className="modal-shell modal-shell--status modal-shell--success"
         role="dialog"
         aria-modal="true"
         aria-labelledby="success-modal-title"
@@ -27,7 +27,7 @@ export function SuccessModal({ message, onConfirm }: SuccessModalProps) {
           </h2>
         </div>
         <p className="modal-shell__body">{message}</p>
-        <div className="modal-shell__actions">
+        <div className="modal-shell__actions modal-shell__actions--single">
           <ConfirmButton type="button" onClick={onConfirm}>
             {t('common.confirm')}
           </ConfirmButton>

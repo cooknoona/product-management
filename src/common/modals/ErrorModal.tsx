@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom'
 import { MdErrorOutline } from 'react-icons/md'
 import { useLocalisation } from '../../localisation'
-import { CloseButton } from '../buttons'
+import { ConfirmButton } from '../buttons'
 import './ModalShell.css'
 
 type ErrorModalProps = {
@@ -14,7 +14,7 @@ export function ErrorModal({ message, onClose }: ErrorModalProps) {
   const node = (
     <div className="modal-shell-backdrop" role="presentation" onClick={onClose}>
       <div
-        className="modal-shell"
+        className="modal-shell modal-shell--status modal-shell--error"
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="error-modal-title"
@@ -27,10 +27,10 @@ export function ErrorModal({ message, onClose }: ErrorModalProps) {
           </h2>
         </div>
         <p className="modal-shell__body">{message}</p>
-        <div className="modal-shell__actions">
-          <CloseButton type="button" onClick={onClose}>
+        <div className="modal-shell__actions modal-shell__actions--single">
+          <ConfirmButton type="button" onClick={onClose}>
             {t('common.close')}
-          </CloseButton>
+          </ConfirmButton>
         </div>
       </div>
     </div>

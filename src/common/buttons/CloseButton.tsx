@@ -1,13 +1,14 @@
-import type { ButtonHTMLAttributes, PropsWithChildren } from 'react'
+import type { ButtonHTMLAttributes } from 'react'
+import { MdClose } from 'react-icons/md'
 import './ActionButtons.css'
 
-type CloseButtonProps = PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>
+type CloseButtonProps = ButtonHTMLAttributes<HTMLButtonElement>
 
-export function CloseButton({ children, className = '', ...props }: CloseButtonProps) {
-  const mergedClassName = ['action-button', 'action-button--cancel', className].filter(Boolean).join(' ')
+export function CloseButton({ className = '', ...props }: CloseButtonProps) {
+  const mergedClassName = ['close-button', className].filter(Boolean).join(' ')
   return (
     <button {...props} className={mergedClassName}>
-      {children}
+      <MdClose className="close-button__icon" aria-hidden />
     </button>
   )
 }

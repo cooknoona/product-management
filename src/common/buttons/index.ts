@@ -1,4 +1,4 @@
-export { SettingsButton } from './SettingsButton'
+export { SettingButton } from './SettingButton'
 export { LoginButton } from './LoginButton'
 export { ApplyButton } from './ApplyButton'
 export { ConfirmButton } from './ConfirmButton'

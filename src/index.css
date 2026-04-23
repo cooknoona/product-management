@@ -1,5 +1,6 @@
 [data-theme='light'] {
   color-scheme: light;
+  --button-fixed-width: 9.5rem;
   --text: #0f172a;
   --muted: #64748b;
   --border: #e2e8f0;
@@ -16,6 +17,7 @@
 
 [data-theme='dark'] {
   color-scheme: dark;
+  --button-fixed-width: 9.5rem;
   --text: #f1f5f9;
   --muted: #94a3b8;
   --border: #334155;
@@ -50,4 +52,18 @@ body {
 
 #root {
   min-height: 100vh;
+}
+
+button {
+  transition:
+    transform 0.14s ease,
+    filter 0.14s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: scale(1.03);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.99);
 }

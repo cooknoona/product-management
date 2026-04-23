@@ -1,4 +1,5 @@
 .login-button {
+  min-width: var(--button-fixed-width);
   padding: 0.65rem 1rem;
   border-radius: 8px;
   border: none;

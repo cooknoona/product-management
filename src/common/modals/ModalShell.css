@@ -22,7 +22,6 @@
 .modal-shell__header {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
@@ -70,14 +69,56 @@
 
 .modal-shell__actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 0.65rem;
 }
 
-.modal-shell__actions--warning {
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.modal-shell__actions--single > .action-button {
+  width: 9.5rem;
 }
 
-.modal-shell__actions--dual {
+.modal-shell__actions--dual > .action-button {
+  width: 9.5rem;
+}
+
+.modal-shell--status .modal-shell__header {
+  flex-direction: column;
   gap: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.modal-shell--status .modal-shell__title {
+  font-size: 1.45rem;
+  letter-spacing: 0.01em;
+}
+
+.modal-shell--status .modal-shell__body {
+  margin-bottom: 1.25rem;
+}
+
+.modal-shell--status .modal-shell__icon {
+  width: 2.1rem;
+  height: 2.1rem;
+}
+
+.modal-shell--error {
+  --accent: var(--semantic-error);
+  --accent-contrast: #ffffff;
+}
+
+.modal-shell--warning {
+  --accent: var(--semantic-warning);
+  --accent-contrast: #ffffff;
+}
+
+.modal-shell--success {
+  --accent: var(--semantic-success);
+  --accent-contrast: #ffffff;
+}
+
+.modal-shell--confirm {
+  --accent: var(--semantic-confirm);
+  --accent-contrast: #ffffff;
 }

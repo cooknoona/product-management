@@ -50,6 +50,7 @@ export const messagesEn: Record<MessageKey, string> = {
   'settings.language.korean': 'Korean',
   'settings.language.english': 'English',
   'settings.cancelWarning': 'Changed settings may not be applied.',
+  'settings.confirmApplyWarning': 'Do you want to apply the changed settings?',
   'error.invalidInput': 'Please check your input.',
   'error.invalidCredentials': 'Invalid account or password.',
   'error.invalidProductName': 'Please check the product name.',
